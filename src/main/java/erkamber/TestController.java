@@ -1,9 +1,13 @@
 package erkamber;
 
 
-import erkamber.dtos.UserDto;
-import erkamber.services.interfaces.RoleService;
-import erkamber.services.interfaces.UserService;
+import erkamber.dtos.*;
+import erkamber.entities.Role;
+import erkamber.requests.CategoryRequestDto;
+import erkamber.requests.ReviewRequestDto;
+import erkamber.requests.UserRequestDto;
+import erkamber.requests.VenueRequestDto;
+import erkamber.services.interfaces.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,22 +24,29 @@ public class TestController {
 
     private final RoleService roleService;
 
-    public TestController(UserService userService, RoleService roleService) {
+    private final CategoryService categoryService;
+
+    private final ReviewService reviewService;
+
+    private final VenueService venueService;
+
+    public TestController(UserService userService, RoleService roleService, CategoryService categoryService, ReviewService reviewService, VenueService venueService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.categoryService = categoryService;
+        this.reviewService = reviewService;
+        this.venueService = venueService;
     }
 
     @PostMapping("/users/register")
-    public ResponseEntity<Void> addNewUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<Void> addNewUser(@Valid @RequestBody VenueRequestDto userDto) {
 
-        UserDto user = userService.addUser(userDto);
-
-        return ResponseEntity.ok().build();
+        return null;
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<UserDto>> getUserByUserID() {
+    public ResponseEntity<List<CategoryDto>> getUserByUserID() {
 
-        return ResponseEntity.ok(userService.findUsersByRoleID(1));
+        return ResponseEntity.ok(categoryService.getAllCategories());
     }
 }

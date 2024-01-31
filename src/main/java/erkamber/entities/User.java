@@ -31,7 +31,7 @@ public class User {
     @Column(name = "last_name", length = 20, unique = false, updatable = true, insertable = true, nullable = false)
     private String userLastName;
 
-    @Column(name = "password", length = 300, unique = false, updatable = true, insertable = true, nullable = false)
+    @Column(name = "password", length = 500, unique = false, updatable = true, insertable = true, nullable = false)
     private String userPassword;
 
     @ManyToOne

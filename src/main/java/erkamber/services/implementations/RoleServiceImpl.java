@@ -109,19 +109,21 @@ public class RoleServiceImpl implements RoleService {
 
         List<Role> allRoles = roleRepository.findAll();
 
-        return mapListToUserDto(allRoles);
+        return mapListToRoleDto(allRoles);
     }
 
-    @Override
-    public Role getRoleByUserID(int userID) {
+   // @Override
+    //public Role getRoleByUserID(int userID) {
 
-        Optional<Role> searchedRoleOptional = roleRepository.findRoleByUserID(userID);
+//        Optional<Role> searchedRoleOptional = roleRepository.findRoleByUserID(userID);
+//
+//        return searchedRoleOptional.orElseThrow(() ->
+//                new ResourceNotFoundException("Role not found for User ID:" + userID, "Role"));
 
-        return searchedRoleOptional.orElseThrow(() ->
-                new ResourceNotFoundException("Role not found for User ID:" + userID, "Role"));
-    }
+       // return null;
+   // }
 
-    private List<RoleDto> mapListToUserDto(List<Role> listOfRoles) {
+    private List<RoleDto> mapListToRoleDto(List<Role> listOfRoles) {
 
         return listOfRoles.stream()
                 .map(roles -> modelMapper.map(roles, RoleDto.class))
@@ -134,5 +136,15 @@ public class RoleServiceImpl implements RoleService {
 
             throw new InvalidInputException("Role name must contain only characters");
         }
+    }
+
+    Role getRoleByID(int roleID) {
+
+        Optional<Role> searchedRoleOptional = roleRepository.findById(roleID);
+
+        Role searchedRole = searchedRoleOptional.orElseThrow(() ->
+                new ResourceNotFoundException("Role with ID not Found:" + roleID, "Role"));
+
+        return searchedRole;
     }
 }

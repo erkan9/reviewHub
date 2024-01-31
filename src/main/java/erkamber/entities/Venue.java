@@ -43,6 +43,9 @@ public class Venue {
     @Column(name = "rating", unique = false, updatable = true, insertable = true, nullable = false)
     private double averageRating = 0;
 
+    @Column(name = "review_count", unique = false, updatable = true, insertable = true, nullable = false)
+    int reviewCount = 0;
+
     @ManyToOne
     private Category category;
 

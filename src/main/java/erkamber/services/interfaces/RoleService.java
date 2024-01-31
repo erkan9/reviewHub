@@ -21,5 +21,5 @@ public interface RoleService {
 
     List<RoleDto> getAll();
 
-    Role getRoleByUserID(int userID);
+   // Role getRoleByUserID(int userID);
 }

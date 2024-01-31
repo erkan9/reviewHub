@@ -7,7 +7,7 @@ import erkamber.entities.User;
 import erkamber.exceptions.InvalidInputException;
 import erkamber.exceptions.ResourceNotFoundException;
 import erkamber.repositories.UserRepository;
-import erkamber.services.interfaces.RoleService;
+import erkamber.requests.UserRequestDto;
 import erkamber.services.interfaces.UserService;
 import erkamber.validations.UserValidation;
 import org.modelmapper.ModelMapper;
@@ -28,10 +28,10 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoderConfiguration passwordEncoderConfiguration;
 
-    private final RoleService roleService;
+    private final RoleServiceImpl roleService;
 
     public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper,
-                           UserValidation userValidation, PasswordEncoderConfiguration passwordEncoderConfiguration, RoleService roleService) {
+                           UserValidation userValidation, PasswordEncoderConfiguration passwordEncoderConfiguration, RoleServiceImpl roleService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.userValidation = userValidation;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto addUser(UserDto userDto) {
+    public UserDto addUser(UserRequestDto userDto) {
 
         isUserNameValid(userDto.getUserName());
 
@@ -48,15 +48,19 @@ public class UserServiceImpl implements UserService {
 
         isUserFirstOrLastNameValid(userDto.getUserLastName());
 
+        String encodedUserPassword = passwordEncoderConfiguration.passwordEncoder().encode(userDto.getUserPassword());
+
+        userDto.setUserPassword(encodedUserPassword);
+
         User newUser = modelMapper.map(userDto, User.class);
 
-        String encodedPassword = passwordEncoderConfiguration.passwordEncoder().encode(userDto.getUserPassword());
+        Role role = roleService.getRoleByID(userDto.getRoleID());
 
-        newUser.setUserPassword(encodedPassword);
+        newUser.setRole(role);
 
         userRepository.save(newUser);
 
-        return userDto;
+        return modelMapper.map(newUser, UserDto.class);
     }
 
     @Override
@@ -74,9 +78,9 @@ public class UserServiceImpl implements UserService {
 
     private void getUserRole(int userID, User searchedUser) {
 
-        Role role = roleService.getRoleByUserID(userID);
+       // Role role = roleService.getRoleByUserID(userID);
 
-        searchedUser.setRole(role);
+       // searchedUser.setRole(role);
     }
 
     @Override
@@ -152,10 +156,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto login(String username, String password) {
 
-        Optional<User> searchedUser = userRepository.findUserByUserNameAndUserPassword(username, password);
-
-        User loginUser = searchedUser.orElseThrow(() ->
-                new ResourceNotFoundException("User with credentials not found", "User"));
+        User loginUser = getLoginUser(username, password);
 
         getUserRole(loginUser.getUserID(), loginUser);
 
@@ -172,8 +173,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(userToDelete);
 
-        getUserRole(userToDelete.getUserID(), userToDelete);
-
         return userToDelete.getUserID();
     }
 
@@ -186,8 +185,6 @@ public class UserServiceImpl implements UserService {
                 new ResourceNotFoundException("User for deletion not Found:" + username, "User"));
 
         userRepository.delete(userToDelete);
-
-        getUserRole(userToDelete.getUserID(), userToDelete);
 
         return userToDelete.getUserID();
     }
@@ -221,5 +218,26 @@ public class UserServiceImpl implements UserService {
 
             throw new ResourceNotFoundException("Users not Found", "User");
         }
+    }
+
+    private User getLoginUser(String userName, String password) {
+
+        List<User> allUsers = userRepository.findAll();
+
+        return allUsers.stream()
+                .filter(user -> user.getUserName().equals(userName) &&
+                        passwordEncoderConfiguration.passwordEncoder().matches(password, user.getUserPassword()))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Incorrect email or password!", "User"));
+    }
+
+    User findUserByID(int userID) {
+
+        Optional<User> searchedUserOptional = userRepository.findById(userID);
+
+        User searchedUser = searchedUserOptional.orElseThrow(() ->
+                new ResourceNotFoundException("User ID not Found:" + userID, "User"));
+
+        return searchedUser;
     }
 }
