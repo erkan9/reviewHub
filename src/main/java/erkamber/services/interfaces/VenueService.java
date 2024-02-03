@@ -16,6 +16,8 @@ public interface VenueService {
 
     List<VenueDto> findVenueByVenueCity(String city);
 
+    List<VenueDto> findVenuesByCategoryID(int categoryID);
+
     List<VenueDto> findVenueByVenueCityOrderByAverageRatingAsc(String city);
 
     List<VenueDto> findVenueByVenueCityOrderByAverageRatingDesc(String city);
@@ -31,4 +33,8 @@ public interface VenueService {
     List<VenueDto> findAllByOrderByAverageRatingDesc();
 
     List<VenueDto> findAllVenues();
+
+    void deleteByVenueID(int venueID);
+
+    int updateVenue(int venueID, String phone, String address, String city, String description);
 }

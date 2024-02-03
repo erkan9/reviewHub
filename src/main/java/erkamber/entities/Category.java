@@ -24,6 +24,6 @@ public class Category {
     @Column(name = "category", length = 15, unique = true, updatable = true, insertable = true, nullable = false)
     private String category;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Venue> venue;
 }

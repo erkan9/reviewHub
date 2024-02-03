@@ -16,6 +16,8 @@ public interface VenueRepository extends JpaRepository<Venue, Integer> {
 
     List<Venue> findVenueByVenueCity(String city);
 
+    List<Venue> findVenueByCategoryCategoryID(int categoryID);
+
     List<Venue> findVenueByVenueCityOrderByAverageRatingAsc(String city);
 
     List<Venue> findVenueByVenueCityOrderByAverageRatingDesc(String city);

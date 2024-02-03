@@ -88,7 +88,7 @@ public class ReviewServiceImpl implements ReviewService {
         Review review = reviewOptional.orElseThrow(() ->
                 new ResourceNotFoundException("Review not Found", "Review"));
 
-        Venue venue = venueService.findVenueByID(review.getReviewID());
+        Venue venue = venueService.findVenueByID(review.getVenue().getVenueID());
 
         int rating = review.getRating();
 

@@ -1,5 +1,6 @@
 package erkamber.requests;
 
+import erkamber.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,5 +50,14 @@ public class UserRequestDto {
     private String userPassword;
 
     @PositiveOrZero
-    int roleID;
+    int roleID = 1;
+
+    public UserRequestDto(String userName, String userEmail, String userFirstName, String userLastName, String userPassword, int roleID) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userFirstName = userFirstName;
+        this.userLastName = userLastName;
+        this.userPassword = userPassword;
+        this.roleID = roleID;
+    }
 }

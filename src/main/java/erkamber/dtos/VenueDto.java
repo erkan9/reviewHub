@@ -44,12 +44,12 @@ public class VenueDto {
     private String email;
 
     @Min(value = 0, message = "Average rating cannot be negative")
-    @Max(value = 5, message = "Average rating cannot be greater than 5")
+    @DecimalMax(value = "5.00", message = "Average rating cannot be greater than 5.00")
     private double averageRating = 0;
 
     int reviewCount = 0;
 
-    private Category category;
+    private String category;
 
     List<Review> venueReviews;
 }

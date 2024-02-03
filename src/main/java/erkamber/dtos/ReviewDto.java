@@ -1,5 +1,6 @@
 package erkamber.dtos;
 
+import erkamber.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,8 @@ public class ReviewDto {
     private int rating;
 
     @NotNull(message = "Author is required")
-    private int authorID;
+    private String authorName;
 
     @NotNull(message = "Venue is required")
-    private int venueID;
+    private String venueName;
 }

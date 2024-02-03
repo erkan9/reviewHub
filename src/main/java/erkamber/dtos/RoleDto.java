@@ -19,4 +19,8 @@ public class RoleDto {
     @NotNull(message = "Role cannot be Null")
     @Size(max = 30, message = "Role must be up to 30 characters long")
     private String role;
+
+    public RoleDto(String role) {
+        this.role = role;
+    }
 }

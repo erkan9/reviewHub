@@ -14,7 +14,7 @@
     <name>Project</name>
     <description>Project by Erkan Kamber</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -62,6 +62,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20220924</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring-boot-starter</artifactId>
+            <version>23.2.8</version>
         </dependency>
     </dependencies>
 

@@ -31,4 +31,11 @@ public class ReviewRequestDto {
 
     @PositiveOrZero
     private int venueID;
+
+    public ReviewRequestDto(String description, int rating, int authorID, int venueID) {
+        this.description = description;
+        this.rating = rating;
+        this.authorID = authorID;
+        this.venueID = venueID;
+    }
 }

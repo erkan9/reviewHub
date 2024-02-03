@@ -28,4 +28,6 @@ public interface UserService {
     int deleteByUsername(String username);
 
     List<UserDto> findUsersByRoleID(int roleID);
+
+    void updateUser(UserDto userDto);
 }

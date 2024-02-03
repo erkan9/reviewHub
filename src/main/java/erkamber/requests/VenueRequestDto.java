@@ -47,4 +47,14 @@ public class VenueRequestDto {
 
     @PositiveOrZero
     private int categoryID;
+
+    public VenueRequestDto(String venueName, String venueDescription, String venueCity, String venueAddress, String phoneNumber, String email, int categoryID) {
+        this.venueName = venueName;
+        this.venueDescription = venueDescription;
+        this.venueCity = venueCity;
+        this.venueAddress = venueAddress;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.categoryID = categoryID;
+    }
 }

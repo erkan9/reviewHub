@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +22,5 @@ public class CategoryDto {
     @Size(max = 15, message = "Category name must be up to 15 characters")
     private String category;
 
-    // You can customize validation annotations for the List if needed
-    //private List<VenueDTO> venue;
+    private List<VenueDto> venue;
 }

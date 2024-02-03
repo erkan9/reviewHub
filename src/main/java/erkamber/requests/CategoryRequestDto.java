@@ -19,4 +19,8 @@ public class CategoryRequestDto {
     @NotBlank(message = "Category name cannot be blank")
     @Size(max = 15, message = "Category name must be up to 15 characters")
     private String category;
+
+    public CategoryRequestDto(String category) {
+        this.category = category;
+    }
 }

@@ -49,6 +49,6 @@ public class Venue {
     @ManyToOne
     private Category category;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     List<Review> venueReviews;
 }

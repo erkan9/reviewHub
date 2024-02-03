@@ -74,6 +74,14 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
+    public List<VenueDto> findVenuesByCategoryID(int categoryID) {
+
+        List<Venue> venuesByCategory = venueRepository.findVenueByCategoryCategoryID(categoryID);
+
+        return mapListToVenueDto(venuesByCategory);
+    }
+
+    @Override
     public List<VenueDto> findVenueByVenueCityOrderByAverageRatingAsc(String city) {
 
         List<Venue> orderedVenues = venueRepository.findVenueByVenueCityOrderByAverageRatingAsc(city);
@@ -145,6 +153,49 @@ public class VenueServiceImpl implements VenueService {
         List<Venue> allVenues = venueRepository.findAll();
 
         return mapListToVenueDto(allVenues);
+    }
+
+    @Override
+    public void deleteByVenueID(int venueID) {
+
+        Optional<Venue> searchedVenueOptional = venueRepository.findById(venueID);
+
+        Venue searchedVenue = searchedVenueOptional.orElseThrow(() ->
+                new ResourceNotFoundException("Venue not Found", "Venue"));
+
+        venueRepository.delete(searchedVenue);
+    }
+
+    @Override
+    public int updateVenue(int venueID, String phone, String address, String city, String description) {
+
+        Optional<Venue> searchedVenueOptional = venueRepository.findById(venueID);
+
+        Venue venueToUpdate = searchedVenueOptional.orElseThrow(() ->
+                new ResourceNotFoundException("Venue not Found", "Venue"));
+
+        if (phone != null && !phone.trim().isEmpty()) {
+            venueToUpdate.setPhoneNumber(phone.trim());
+        }
+
+        // Check and update address
+        if (address != null && !address.trim().isEmpty()) {
+            venueToUpdate.setVenueAddress(address.trim());
+        }
+
+        // Check and update city
+        if (city != null && !city.trim().isEmpty()) {
+            venueToUpdate.setVenueCity(city.trim());
+        }
+
+        // Check and update description
+        if (description != null && !description.trim().isEmpty()) {
+            venueToUpdate.setVenueDescription(description.trim());
+        }
+
+        venueRepository.save(venueToUpdate);
+
+        return venueID;
     }
 
     private List<VenueDto> mapListToVenueDto(List<Venue> listOfVenues) {

@@ -10,14 +10,17 @@ import erkamber.repositories.UserRepository;
 import erkamber.requests.UserRequestDto;
 import erkamber.services.interfaces.UserService;
 import erkamber.validations.UserValidation;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -78,9 +81,9 @@ public class UserServiceImpl implements UserService {
 
     private void getUserRole(int userID, User searchedUser) {
 
-       // Role role = roleService.getRoleByUserID(userID);
+        // Role role = roleService.getRoleByUserID(userID);
 
-       // searchedUser.setRole(role);
+        // searchedUser.setRole(role);
     }
 
     @Override
@@ -154,6 +157,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUser(UserDto userDto) {
+
+        Optional<User> searchedUserOptional = userRepository.findById(userDto.getUserID());
+
+        User searchedUser = searchedUserOptional.orElseThrow(() ->
+                new ResourceNotFoundException("User not found:" + userDto.getUserID(), "User"));
+
+        if (StringUtils.isNotBlank(userDto.getUserFirstName())) {
+            searchedUser.setUserFirstName(userDto.getUserFirstName().trim());
+        }
+
+        // Validate and update last name
+        if (StringUtils.isNotBlank(userDto.getUserLastName())) {
+            searchedUser.setUserLastName(userDto.getUserLastName().trim());
+        }
+
+        // Validate and update role
+        if (userDto.getRole() != null && StringUtils.isNotBlank(userDto.getRole().getRole())) {
+            searchedUser.setRole(modelMapper.map(userDto.getRole(), Role.class));
+        }
+
+        userRepository.save(modelMapper.map(userDto, User.class));
+    }
+
+    @Override
     public UserDto login(String username, String password) {
 
         User loginUser = getLoginUser(username, password);
@@ -173,7 +201,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.delete(userToDelete);
 
-        return userToDelete.getUserID();
+        return 1;
     }
 
     @Override
@@ -235,9 +263,7 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> searchedUserOptional = userRepository.findById(userID);
 
-        User searchedUser = searchedUserOptional.orElseThrow(() ->
+        return searchedUserOptional.orElseThrow(() ->
                 new ResourceNotFoundException("User ID not Found:" + userID, "User"));
-
-        return searchedUser;
     }
 }
